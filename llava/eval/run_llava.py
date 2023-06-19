@@ -61,11 +61,11 @@ def setup_models(args):
     model_name = os.path.expanduser(args.model_name)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     if "mpt" in model_name.lower():
-        model = LlavaMPTForCausalLM.from_pretrained(model_name, low_cpu_mem_usage=True, torch_dtype=torch.float16,
-                                                    use_cache=True).cuda()
+        model = LlavaMPTForCausalLM.from_pretrained(model_name, low_cpu_mem_usage=True, torch_dtype=torch.float16, 
+                                                        use_cache=True, device_map='auto')
     else:
         model = LlavaLlamaForCausalLM.from_pretrained(model_name, low_cpu_mem_usage=True, torch_dtype=torch.float16,
-                                                      use_cache=True).cuda()
+                                                        use_cache=True, device_map='auto')
 
     image_processor = CLIPImageProcessor.from_pretrained(model.config.mm_vision_tower, torch_dtype=torch.float16)
     mm_use_im_start_end = getattr(model.config, "mm_use_im_start_end", False)
